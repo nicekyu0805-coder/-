@@ -6,8 +6,8 @@
 // 초기 데이터 설정
 // ========================================
 const DEFAULT_ADMIN = {
-    email: 'admin@math.academy',
-    password: 'admin123',
+    email: 'nicekyu@math.academy',
+    password: 'leekskk0191!',
     name: '관리자',
     role: 'admin',
     status: 'approved'
