@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="위드물맷돌수학학원 자료실 - 학원생 전용 학습 자료">
+    <title>자료실 - 위드물맷돌수학학원</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">📐</span>
+                <span class="logo-text">위드물맷돌수학학원</span>
+            </a>
+            <nav class="nav">
+                <a href="index.html">홈</a>
+                <a href="dashboard.html" class="active">자료실</a>
+            </nav>
+            <div class="auth-buttons" id="authButtons">
+                <span id="userNameDisplay"></span>
+                <button class="btn btn-outline" onclick="handleLogout()">로그아웃</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 대시보드 헤더 -->
+    <div class="dashboard-header">
+        <div class="container">
+            <h1 class="dashboard-title">📚 학습 자료실</h1>
+            <p class="dashboard-subtitle">학원생 전용 학습 자료를 다운로드 받으세요</p>
+        </div>
+    </div>
+
+    <!-- 대시보드 컨텐츠 -->
+    <div class="dashboard-content">
+        <div class="container">
+            <!-- 사용자 정보 바 -->
+            <div class="user-bar" id="userBar">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">홍</div>
+                    <div class="user-details">
+                        <h4 id="dashUserName">홍길동</h4>
+                        <span id="dashUserGrade">중등 2학년</span>
+                    </div>
+                </div>
+                <a href="admin.html" class="btn btn-outline" id="adminLink" style="display: none;">
+                    관리자 페이지
+                </a>
+            </div>
+
+            <!-- 필터 바 -->
+            <div class="filter-bar">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="자료 검색..." oninput="filterMaterials()">
+                </div>
+                <select class="filter-select" id="gradeFilter" onchange="filterMaterials()">
+                    <option value="">전체 학년</option>
+                    <optgroup label="초등학교">
+                        <option value="초1">초등 1학년</option>
+                        <option value="초2">초등 2학년</option>
+                        <option value="초3">초등 3학년</option>
+                        <option value="초4">초등 4학년</option>
+                        <option value="초5">초등 5학년</option>
+                        <option value="초6">초등 6학년</option>
+                    </optgroup>
+                    <optgroup label="중학교">
+                        <option value="중1">중학 1학년</option>
+                        <option value="중2">중학 2학년</option>
+                        <option value="중3">중학 3학년</option>
+                    </optgroup>
+                    <optgroup label="고등학교">
+                        <option value="고1">고등 1학년</option>
+                        <option value="고2">고등 2학년</option>
+                        <option value="고3">고등 3학년</option>
+                    </optgroup>
+                </select>
+                <select class="filter-select" id="categoryFilter" onchange="filterMaterials()">
+                    <option value="">전체 유형</option>
+                    <option value="개념정리">개념정리</option>
+                    <option value="문제풀이">문제풀이</option>
+                    <option value="기출문제">기출문제</option>
+                    <option value="시험대비">시험대비</option>
+                    <option value="기타">기타</option>
+                </select>
+            </div>
+
+            <!-- 자료 목록 -->
+            <div class="materials-grid" id="materialsGrid">
+                <!-- 동적으로 생성됨 -->
+            </div>
+
+            <!-- 빈 상태 -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-state-icon">📭</div>
+                <h3>아직 등록된 자료가 없습니다</h3>
+                <p>관리자가 곧 자료를 업로드할 예정입니다</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span class="logo-icon">📐</span>
+                    <span>위드물맷돌수학학원</span>
+                </div>
+                <p class="footer-copyright">© 2024 위드물맷돌수학학원. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 알림 토스트 -->
+    <div class="toast" id="toast"></div>
+
+    <script src="app.js"></script>
+    <script>
+        // 페이지 로드 시 로그인 확인
+        document.addEventListener('DOMContentLoaded', function () {
+            checkAuthForDashboard();
+        });
+    </script>
+</body>
+
+</html>

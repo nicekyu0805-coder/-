@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="위드물맷돌수학학원 관리자 페이지">
+    <title>관리자 - 위드물맷돌수학학원</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">📐</span>
+                <span class="logo-text">위드물맷돌수학학원</span>
+            </a>
+            <nav class="nav">
+                <a href="index.html">홈</a>
+                <a href="dashboard.html">자료실</a>
+                <a href="admin.html" class="active">관리자</a>
+            </nav>
+            <div class="auth-buttons">
+                <span id="adminNameDisplay"></span>
+                <button class="btn btn-outline" onclick="handleLogout()">로그아웃</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 대시보드 헤더 -->
+    <div class="dashboard-header">
+        <div class="container">
+            <h1 class="dashboard-title">⚙️ 관리자 페이지</h1>
+            <p class="dashboard-subtitle">회원 관리 및 자료 업로드</p>
+        </div>
+    </div>
+
+    <!-- 대시보드 컨텐츠 -->
+    <div class="dashboard-content">
+        <div class="container">
+            <!-- 탭 메뉴 -->
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('upload')">📤 자료 업로드</button>
+                <button class="tab" onclick="switchTab('pending')">👥 가입 승인</button>
+                <button class="tab" onclick="switchTab('users')">📋 회원 관리</button>
+                <button class="tab" onclick="switchTab('materials')">📁 자료 관리</button>
+            </div>
+
+            <!-- 자료 업로드 섹션 -->
+            <div class="admin-section" id="uploadSection">
+                <h3>📤 자료 업로드</h3>
+
+                <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+                    <div class="upload-zone-icon">📁</div>
+                    <h4>파일을 드래그하거나 클릭하여 업로드</h4>
+                    <p>PDF, HWP, DOC, DOCX, XLS, XLSX, PPT, PPTX, 이미지 파일 지원</p>
+                    <button class="btn btn-primary">파일 선택</button>
+                    <input type="file" id="fileInput" multiple onchange="handleFileSelect(event)">
+                </div>
+
+                <div class="upload-form" id="uploadForm">
+                    <div class="file-preview" id="filePreview">
+                        <span class="file-preview-icon">📄</span>
+                        <div class="file-preview-info">
+                            <h5 id="previewFileName">파일명.pdf</h5>
+                            <span id="previewFileSize">1.2 MB</span>
+                        </div>
+                        <button class="btn-delete" onclick="clearUpload()">✕</button>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="uploadTitle">자료 제목</label>
+                            <input type="text" id="uploadTitle" placeholder="예: 중1 1학기 중간고사 대비 문제집">
+                        </div>
+                        <div class="form-group">
+                            <label for="uploadGrade">대상 학년</label>
+                            <select id="uploadGrade">
+                                <option value="">학년 선택</option>
+                                <optgroup label="초등학교">
+                                    <option value="초1">초등 1학년</option>
+                                    <option value="초2">초등 2학년</option>
+                                    <option value="초3">초등 3학년</option>
+                                    <option value="초4">초등 4학년</option>
+                                    <option value="초5">초등 5학년</option>
+                                    <option value="초6">초등 6학년</option>
+                                </optgroup>
+                                <optgroup label="중학교">
+                                    <option value="중1">중학 1학년</option>
+                                    <option value="중2">중학 2학년</option>
+                                    <option value="중3">중학 3학년</option>
+                                </optgroup>
+                                <optgroup label="고등학교">
+                                    <option value="고1">고등 1학년</option>
+                                    <option value="고2">고등 2학년</option>
+                                    <option value="고3">고등 3학년</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="uploadCategory">자료 유형</label>
+                            <select id="uploadCategory">
+                                <option value="">유형 선택</option>
+                                <option value="개념정리">개념정리</option>
+                                <option value="문제풀이">문제풀이</option>
+                                <option value="기출문제">기출문제</option>
+                                <option value="시험대비">시험대비</option>
+                                <option value="기타">기타</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="uploadUnit">단원명 (선택)</label>
+                            <input type="text" id="uploadUnit" placeholder="예: 일차방정식">
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary btn-lg" onclick="uploadMaterial()">
+                        📤 자료 업로드
+                    </button>
+                </div>
+            </div>
+
+            <!-- 가입 승인 섹션 -->
+            <div class="admin-section" id="pendingSection" style="display: none;">
+                <h3>👥 가입 승인 대기 (<span id="pendingCount">0</span>명)</h3>
+                <div class="pending-list" id="pendingList">
+                    <!-- 동적으로 생성됨 -->
+                </div>
+                <div class="empty-state" id="noPendingState" style="display: none;">
+                    <div class="empty-state-icon">✅</div>
+                    <h3>승인 대기 중인 회원이 없습니다</h3>
+                </div>
+            </div>
+
+            <!-- 회원 관리 섹션 -->
+            <div class="admin-section" id="usersSection" style="display: none;">
+                <h3>📋 전체 회원 목록</h3>
+                <table class="users-table">
+                    <thead>
+                        <tr>
+                            <th>이름</th>
+                            <th>이메일</th>
+                            <th>학년</th>
+                            <th>연락처</th>
+                            <th>상태</th>
+                            <th>관리</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <!-- 동적으로 생성됨 -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 자료 관리 섹션 -->
+            <div class="admin-section" id="materialsSection" style="display: none;">
+                <h3>📁 업로드된 자료 관리</h3>
+                <div class="materials-grid" id="adminMaterialsGrid">
+                    <!-- 동적으로 생성됨 -->
+                </div>
+                <div class="empty-state" id="noMaterialsState" style="display: none;">
+                    <div class="empty-state-icon">📭</div>
+                    <h3>업로드된 자료가 없습니다</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span class="logo-icon">📐</span>
+                    <span>위드물맷돌수학학원</span>
+                </div>
+                <p class="footer-copyright">© 2024 위드물맷돌수학학원. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 알림 토스트 -->
+    <div class="toast" id="toast"></div>
+
+    <script src="app.js"></script>
+    <script>
+        // 페이지 로드 시 관리자 확인
+        document.addEventListener('DOMContentLoaded', function () {
+            checkAdminAuth();
+        });
+    </script>
+</body>
+
+</html>
